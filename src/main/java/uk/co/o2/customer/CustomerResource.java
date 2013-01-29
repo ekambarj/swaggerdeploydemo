@@ -33,7 +33,8 @@ public class CustomerResource {
 
 	@GET
 	@Path("/{customerID}")
-	@ApiOperation(value = "Get customer details by customer id", notes = "Returns customer details for the given customer id", responseClass = "uk.co.o2.vo.Customer")
+	@ApiOperation(value = "Get customer details by customer id", 
+	notes = "Returns customer details for the given customer id", responseClass = "uk.co.o2.vo.Customer")
     @ApiErrors(value = { @ApiError(code = 400, reason = "Customer ID invalid"),
     @ApiError(code = 404, reason = "Customer not found") })
 	@Produces(MediaType.APPLICATION_JSON)
