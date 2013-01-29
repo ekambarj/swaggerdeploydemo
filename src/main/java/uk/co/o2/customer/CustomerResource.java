@@ -9,24 +9,33 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.ApiErrors;
+import com.wordnik.swagger.annotations.ApiOperation;
+
 import uk.co.o2.vo.Customer;
 
 
 
 @Path("/customer/")
+@Api(value = "/customer", description = "Manage customer details")
 public class CustomerResource {
 
 	
 	@GET
 	@Path("/")
+	@ApiOperation(value = "Returns list of all available customer details", notes = "Returns all the customer details", responseClass = "java.util.ArrayList<uk.co.o2.vo.Customer>")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Customer> customer() {
-		
 		 return getCustomerDetails();
 	}
 
 	@GET
 	@Path("/{customerID}")
+	@ApiOperation(value = "Get customer details by customer id", notes = "Returns customer details for the given customer id", responseClass = "uk.co.o2.vo.Customer")
+    @ApiErrors(value = { @ApiError(code = 400, reason = "Customer ID invalid"),
+    @ApiError(code = 404, reason = "Customer not found") })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer customer(@PathParam("customerID") int customerID) {
 		
