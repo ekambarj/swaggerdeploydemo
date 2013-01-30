@@ -10,3 +10,5 @@ This project is to try out a simple REST API and associate a swagger based docum
 - Build a deployment script which can deploy the REST API on Tomcat and also
   expose the swagger API associated with it and link them together
 - Ensure that the build and deployment processes are driven through a CI Job
+
+Addin the line to test the integration with jenkins on cloud
