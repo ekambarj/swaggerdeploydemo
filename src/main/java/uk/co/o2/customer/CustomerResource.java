@@ -18,7 +18,7 @@ import uk.co.o2.vo.Customer;
 
 
 
-@Path("/customer/")
+@Path("/customer.json/")
 @Api(value = "/customer", description = "Manage customer details")
 public class CustomerResource {
 
