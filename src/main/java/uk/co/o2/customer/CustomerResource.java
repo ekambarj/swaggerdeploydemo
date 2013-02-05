@@ -18,15 +18,16 @@ import uk.co.o2.vo.Customer;
 
 
 
-@Path("/customer.json/")
-@Api(value = "/customer", description = "Manage customer details")
+@Path("/customers")
+@Api(value = "/customers", description = "Manage customer details")
+@Produces({MediaType.APPLICATION_JSON})
 public class CustomerResource {
 
-	
 	@GET
 	@Path("/")
 	@ApiOperation(value = "Returns list of all available customer details", notes = "Returns all the customer details", responseClass = "java.util.ArrayList<uk.co.o2.vo.Customer>")
-	@Produces(MediaType.APPLICATION_JSON)
+	@ApiErrors(value = { @ApiError(code = 404, reason = "Customers not found") })
+	@Produces({MediaType.APPLICATION_JSON})
 	public List<Customer> customer() {
 		 return getCustomerDetails();
 	}
@@ -37,7 +38,7 @@ public class CustomerResource {
 	notes = "Returns customer details for the given customer id", responseClass = "uk.co.o2.vo.Customer")
     @ApiErrors(value = { @ApiError(code = 400, reason = "Customer ID invalid"),
     @ApiError(code = 404, reason = "Customer not found") })
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON})
 	public Customer customer(@PathParam("customerID") int customerID) {
 		
 		 return getCustomerDetail(customerID);
