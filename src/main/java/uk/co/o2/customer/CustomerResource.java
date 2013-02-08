@@ -24,7 +24,7 @@ import uk.co.o2.vo.Customer;
 public class CustomerResource {
 
 	@GET
-	@Path("/customers")
+	@Path("/")
 	@ApiOperation(value = "Returns list of all available customer details", notes = "Returns all the customer details", responseClass = "uk.co.o2.vo.Customer" , multiValueResponse = true)
 	@ApiErrors(value = { @ApiError(code = 404, reason = "Customers not found") })
 	@Produces({MediaType.APPLICATION_JSON})
