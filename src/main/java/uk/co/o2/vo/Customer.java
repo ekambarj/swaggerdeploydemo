@@ -1,5 +1,7 @@
 package uk.co.o2.vo;
 
+import org.junit.Ignore;
+
 public class Customer {
 
 	private String title;
@@ -10,9 +12,9 @@ public class Customer {
 
 	private String customerType;
 
-	private long MSISDN;
+	private String simNo;
 	
-	private long customerID;
+	private String customerID;
 
 	/**
 	 * @return the title
@@ -76,37 +78,39 @@ public class Customer {
 
 	/**
 	 * @return the mSISDN
+	 * 
 	 */
-	public long getMSISDN() {
-		return MSISDN;
+	@Ignore
+	public String getSimNo() {
+		return simNo;
 	}
 
 	/**
 	 * @param mSISDN
 	 *            the mSISDN to set
 	 */
-	public void setMSISDN(long mSISDN) {
-		MSISDN = mSISDN;
+	public void setSimNo(String msi) {
+		simNo = msi;
 	}
 	
 	/**
 	 * @return the id
 	 */
-	public long getCustomerId() {
+	public String getCustomerId() {
 		return customerID;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setCustomerId(long id) {
+	public void setCustomerId(String id) {
 		this.customerID = id;
 	}
 
 	public String toString() {
 		return "Customer [title= " + title + ", firstName= " + firstName
 				+ ", lastName= " + lastName + ", customerType= " + customerType
-				+ ", MSISDN= " + MSISDN + ", CustomerID= "+customerID +" ]";
+				+ ", MSISDN= " + simNo + ", CustomerID= "+customerID +" ]";
 	}
 
 }
