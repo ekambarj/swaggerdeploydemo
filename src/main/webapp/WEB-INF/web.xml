@@ -17,7 +17,7 @@
 		</init-param>
 		<init-param>
 			<param-name>swagger.api.basepath</param-name>
-			<param-value>http://localhost:6060/HelloRest-1.0-SNAPSHOT/</param-value>
+			<param-value>http://localhost:6080/Customer/</param-value>
 		</init-param>
 		<init-param>
 			<param-name>api.version</param-name>

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -42,95 +42,50 @@ public class CustomerResource {
 	@GET
 	@Path("/")
 	@ApiOperation(value = "Returns list of all available customer details", notes = "Returns all the customer details", responseClass = "uk.co.o2.vo.Customer" , multiValueResponse = true)
+	@ApiErrors(value = { @ApiError(code = 404, reason = "Customers not found") })
 	@Produces({MediaType.APPLICATION_JSON})
-	/**
-	 * Returns list of customer details.
-	 * @return List<Customer> : List of customer details
-	 */
 	public List<Customer> customer() {
-		List<Customer> custList = getCustomerDetails();
-		if(null == custList || custList.size() <=0)
-		{
-			Response.status(Response.Status.NO_CONTENT).build();	
-		}
-		Response.status(Response.Status.OK).build();
-		 
-		 return custList;
+		 return getCustomerDetails();
 	}
 	
 	@POST
 	@Path("/")
 	@ApiOperation(value = "Creates a new customer detail", notes = "Creates a new customer detail", responseClass = "java.lang.String")
-	@Produces({MediaType.APPLICATION_JSON})
+	@ApiErrors(value = { @ApiError(code = 404, reason = "Customers not found") })
 	@Consumes({MediaType.APPLICATION_JSON})
-	/**
-	 * Creates new customer details.
-	 * @return Customer : The newly created customer details
-	 */
-public String customer(@ApiParam(value = "Customer details", required = true) Customer cust) {
-		addCustomer("PREPAY",cust.getFirstName(),cust.getLastName(),cust.getTitle());
-		
-		Response.status(Response.Status.OK).build();	
-		
-		return "Customer details created successfully";
-		
+	@Produces(MediaType.TEXT_PLAIN)
+public Response customer(@ApiParam(value = "Customer value that needs to be added", required = true)Customer cust) {
+		addCustomer(cust.getCustomerType(),cust.getFirstName(),cust.getLastName());
+		return Response.status(Response.Status.OK).build();
 	}
 	
 	@PUT
-	@Path("/{customerID}")
+	@Path("/")
 	@ApiOperation(value = "Updates customer detail", notes = "Updates customer detail", responseClass = "java.lang.String")
-	@ApiErrors(value = { @ApiError(code = 404, reason = "Customer details not found") })
+	@ApiErrors(value = { @ApiError(code = 404, reason = "Customer not found") })
 	@Produces({MediaType.APPLICATION_JSON})
-	@Consumes({MediaType.APPLICATION_JSON})
-	/**
-	 * Updates customer details.
-	 * @return String : The status of the operation
-	 */
-	public String customer(@PathParam("customerID") String customerID,@ApiParam(value = "Customer details", required = true) Customer cust) {
+	public String customer(
+			@FormParam("customerID") String customerID,
+			@FormParam("lastName") String lastName,
+			@FormParam("customerType") String customerType,
+			@FormParam("firstName") String firstName) {
 		
-		if(null == customersMap.get(customerID))
-		{
-			Response.status(Response.Status.NOT_FOUND).build();
-			return "Customer details not found";
-		}
+		updateCustomer(customerType,firstName,lastName,customerID);
 		
-		updateCustomer(cust.getCustomerType(),cust.getFirstName(),cust.getLastName(),customerID);
-		
-		Response.status(Status.OK);
-		 return "Customer details updated successfully";
+		Response.status(Status.ACCEPTED);
+		 return "Customer Added successfully";
 	}
 
 	@GET
 	@Path("/{customerID}")
 	@ApiOperation(value = "Get customer details by customer id", 
 	notes = "Returns customer details for the given customer id", responseClass = "uk.co.o2.vo.Customer")
-    @ApiErrors(value = { @ApiError(code = 404, reason = "Customer details not found"),
-    @ApiError(code = 404, reason = "Customer details not found") })
+    @ApiErrors(value = { @ApiError(code = 400, reason = "Customer ID invalid"),
+    @ApiError(code = 404, reason = "Customer not found") })
 	@Produces({MediaType.APPLICATION_JSON})
-	public Customer customer(@PathParam("customerID") int customerID) throws Exception{
+	public Customer customer(@PathParam("customerID") int customerID) {
 		
-		if(null == customersMap.get(customerID+""))
-		{
-			Response.status(Response.Status.NOT_FOUND).build();
-			throw new Exception(" 404 Customer details not found");
-		}
-		 return getCustomerDetail(customerID+"");
-	}
-	
-	@DELETE
-	@Path("/{customerID}")
-	@ApiOperation(value = "Delete customer details", 
-	notes = "Deletes customer details for the given customer id", responseClass = "java.lang.String")
-    @ApiErrors(value = { @ApiError(code = 404, reason = "Customer Details not found"),
-    @ApiError(code = 404, reason = "Customer Details not found") })
-	@Produces({MediaType.APPLICATION_JSON})
-	
-	public Response customer(@ApiParam(value = "CustomerID", required = true) @PathParam("customerID") String customerID) {
-		if(null == customersMap.remove(customerID))
-		{
-			return Response.status(Response.Status.NOT_FOUND).build();
-		}
-		return Response.status(Response.Status.OK).build();
+		 return getCustomerDetail(customerID);
 	}
 
 	/**
@@ -157,7 +112,7 @@ public String customer(@ApiParam(value = "Customer details", required = true) Cu
 	 * @param custId - The customer id for which customer details is required
 	 * @return Customer - The customer VO
 	 */
-	private Customer getCustomerDetail(String custId)  
+	private Customer getCustomerDetail(int custId)  
 	{	
 		Customer customerVO =customersMap.get(custId); 
 		if(null == customerVO)
@@ -174,17 +129,17 @@ public String customer(@ApiParam(value = "Customer details", required = true) Cu
 	 * @param id : The unique customer id
 	 * @return : Customer VO
 	 */
-	private static Customer addCustomer(String customerType,String firstName,String lastName,String title)
+	private static Customer addCustomer(String customerType,String firstName,String lastName)
 	{
 		
 		Customer customer = new Customer();
 		customer.setCustomerId(customerID+"");
 		customer.setCustomerType("PREPAY");
-		customer.setSimNo("44882291311"+customerID);
+		customer.setSimNo("44882291311l"+customerID);
 		customer.setFirstName(firstName +customerID);
 		customer.setLastName(lastName +customerID);
 		
-		customer.setTitle(title);
+		customer.setTitle("Mr");
 
 		customersMap.put(customerID+"", customer);
 		customerID++;
@@ -227,7 +182,7 @@ public String customer(@ApiParam(value = "Customer details", required = true) Cu
 		Customer customer = new Customer();
 		customer.setCustomerId(id+"");
 		customer.setCustomerType("PREPAY");
-		customer.setSimNo("44882291311"+id);
+		customer.setSimNo("44882291311l"+id);
 		customer.setFirstName("Customer  "+id);
 		customer.setLastName(" Michael "+id);
 		
