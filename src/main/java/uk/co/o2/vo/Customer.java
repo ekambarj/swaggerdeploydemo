@@ -1,6 +1,5 @@
 package uk.co.o2.vo;
 
-import org.junit.Ignore;
 
 public class Customer {
 
@@ -80,7 +79,6 @@ public class Customer {
 	 * @return the mSISDN
 	 * 
 	 */
-	@Ignore
 	public String getSimNo() {
 		return simNo;
 	}
